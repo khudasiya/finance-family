@@ -1,0 +1,1317 @@
+/* ==========================================================================
+   FINAI Modern FinTech Design System — Layout & Theme Engine
+   ========================================================================== */
+
+:root {
+  /* Canvas & Containers */
+  --canvas-bg: #dce4dd;
+  --app-bg: #f4f6f4;
+  --card-bg: #ffffff;
+  --card-bg-subtle: #f8faf8;
+  --card-border: #e6ede6;
+  --card-border-hover: #d1ded1;
+  --card-shadow: 0 4px 20px -2px rgba(18, 32, 23, 0.04), 0 2px 6px -1px rgba(18, 32, 23, 0.02);
+
+  /* Dark Hero Cards */
+  --dark-hero-bg: #121c15;
+  --dark-hero-text: #ffffff;
+  --dark-hero-subtext: #8e9e92;
+  --dark-hero-pill-bg: rgba(34, 197, 94, 0.15);
+  --dark-hero-pill-text: #4ade80;
+
+  /* Typography Colors */
+  --text-primary: #17241b;
+  --text-secondary: #4d5c52;
+  --text-muted: #7c8c81;
+  --text-inverse: #ffffff;
+
+  /* Accent & Status Colors */
+  --accent-green: #22c55e;
+  --accent-green-hover: #16a34a;
+  --accent-green-light: #eaf7ed;
+  --accent-green-border: #bbf7d0;
+
+  --accent-red: #ef4444;
+  --accent-red-light: #fef2f2;
+  --accent-red-border: #fecaca;
+
+  --accent-amber: #f59e0b;
+  --accent-amber-light: #fefbeb;
+
+  --accent-blue: #3b82f6;
+  --accent-blue-light: #eff6ff;
+
+  --accent-purple: #8b5cf6;
+  --accent-purple-light: #f5f3ff;
+
+  /* Sidebar Tokens */
+  --sidebar-active-bg: #121c15;
+  --sidebar-active-text: #ffffff;
+  --sidebar-active-icon: #4ade80;
+  --sidebar-hover-bg: #e8eee8;
+  --sidebar-label: #88998d;
+
+  /* UI Tokens */
+  --radius-app: 28px;
+  --radius-card: 20px;
+  --radius-inner: 14px;
+  --radius-pill: 9999px;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+[data-theme="dark"] {
+  --canvas-bg: #090e0b;
+  --app-bg: #0e1611;
+  --card-bg: #141f17;
+  --card-bg-subtle: #19271e;
+  --card-border: #1f3024;
+  --card-border-hover: #2a4232;
+  --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+
+  --dark-hero-bg: #0a110c;
+  --dark-hero-text: #ffffff;
+  --dark-hero-subtext: #8e9e92;
+
+  --text-primary: #f0f7f2;
+  --text-secondary: #a3b5a8;
+  --text-muted: #697d6f;
+
+  --sidebar-active-bg: #1b291f;
+  --sidebar-active-text: #ffffff;
+  --sidebar-active-icon: #4ade80;
+  --sidebar-hover-bg: #17241b;
+  --sidebar-label: #5e7264;
+
+  --accent-green-light: rgba(34, 197, 94, 0.15);
+  --accent-green-border: rgba(34, 197, 94, 0.3);
+  --accent-red-light: rgba(239, 68, 68, 0.15);
+  --accent-red-border: rgba(239, 68, 68, 0.3);
+}
+
+/* Reset & Global */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--app-bg);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.25s ease;
+  overflow-x: hidden;
+}
+
+/* Outer Master App Layout - Full Screen Edge to Edge */
+.finai-app-frame {
+  background-color: var(--app-bg);
+  width: 100%;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .finai-app-frame {
+    grid-template-columns: 1fr;
+    min-height: 100vh;
+  }
+}
+
+/* Universal FINAI Page & Card Utilities */
+.finai-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  padding: 1.4rem;
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+}
+
+.finai-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.finai-stat-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.15rem;
+}
+
+.finai-stat-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.15rem;
+}
+
+.finai-stat-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.15rem;
+}
+
+@media (max-width: 1024px) {
+  .finai-stat-grid-4, .finai-stat-grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .finai-stat-grid-4, .finai-stat-grid-3, .finai-stat-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.finai-stat-box {
+  background: var(--card-bg-subtle);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-inner);
+  padding: 1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.finai-stat-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.finai-stat-val {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.finai-table-container {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: var(--radius-inner);
+  border: 1px solid var(--card-border);
+}
+
+.finai-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.86rem;
+}
+
+.finai-table th {
+  background: var(--card-bg-subtle);
+  padding: 0.85rem 1rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.finai-table td {
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid var(--card-border);
+  color: var(--text-primary);
+}
+
+.finai-table tr:last-child td {
+  border-bottom: none;
+}
+
+.finai-table tr:hover td {
+  background: var(--card-bg-subtle);
+}
+
+.finai-tab-pill-group {
+  display: flex;
+  gap: 0.35rem;
+  background: var(--card-bg-subtle);
+  padding: 0.3rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--card-border);
+  width: fit-content;
+}
+
+.finai-tab-pill-btn {
+  padding: 0.4rem 0.95rem;
+  border-radius: var(--radius-pill);
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.finai-tab-pill-btn.active {
+  background: var(--sidebar-active-bg);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(18, 28, 21, 0.15);
+}
+
+/* ==========================================================================
+   Sidebar Navigation
+   ========================================================================== */
+.finai-sidebar {
+  padding: 1.75rem 1.4rem 1.5rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid var(--card-border);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  background: var(--app-bg);
+  z-index: 10;
+}
+
+.finai-sidebar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.finai-logo-group {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.finai-logo-icon {
+  width: 32px;
+  height: 32px;
+  background: #121c15;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4ade80;
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: -0.5px;
+}
+
+.finai-brand-text {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+}
+
+.finai-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  overflow-y: auto;
+  padding-right: 0.2rem;
+}
+
+.finai-nav-group-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--sidebar-label);
+  margin-bottom: 0.4rem;
+  padding-left: 0.75rem;
+}
+
+.finai-nav-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.finai-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.95rem;
+  border-radius: var(--radius-pill);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: all 0.15s ease;
+  border: none;
+  background: transparent;
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+}
+
+.finai-nav-link:hover {
+  background-color: var(--sidebar-hover-bg);
+  color: var(--text-primary);
+}
+
+.finai-nav-link.active {
+  background-color: var(--sidebar-active-bg);
+  color: var(--sidebar-active-text);
+  box-shadow: 0 4px 12px rgba(18, 28, 21, 0.15);
+}
+
+.finai-nav-link.active .nav-icon {
+  color: var(--sidebar-active-icon);
+}
+
+/* Sidebar AI Assistant Card */
+.finai-ai-assistant-widget {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  padding: 0.9rem 1rem 0.9rem;
+  margin-top: 1.5rem;
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.finai-ai-widget-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.ai-status-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--accent-green);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+}
+
+.finai-ai-input-pill {
+  display: flex;
+  align-items: center;
+  background: var(--card-bg-subtle);
+  border: 1.5px solid var(--accent-green);
+  border-radius: var(--radius-pill);
+  padding: 0.35rem 0.65rem 0.35rem 0.85rem;
+  gap: 0.4rem;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.08);
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.finai-ai-input-pill input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 0.76rem;
+  font-family: inherit;
+  color: var(--text-primary);
+  box-sizing: border-box;
+}
+
+.finai-ai-input-pill input::placeholder {
+  color: var(--text-muted);
+}
+
+.finai-ai-send-btn {
+  background: transparent;
+  border: none;
+  color: var(--accent-green);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+.finai-ai-send-btn:hover {
+  transform: translateX(2px);
+}
+
+.finai-ai-prompts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.finai-ai-prompt-chip {
+  background: var(--card-bg-subtle);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-pill);
+  padding: 0.25rem 0.6rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.finai-ai-prompt-chip:hover {
+  background: var(--accent-green-light);
+  color: var(--accent-green-hover);
+  border-color: var(--accent-green-border);
+}
+
+/* ==========================================================================
+   Main Content Layout & Top Header
+   ========================================================================== */
+.finai-main-area {
+  padding: 1.75rem 2.5rem 2.5rem 2.25rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .finai-main-area {
+    padding: 1.25rem;
+  }
+}
+
+.finai-top-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.finai-user-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.finai-user-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--card-bg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.finai-greeting-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.finai-greeting-sub {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.finai-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.finai-circle-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  cursor: pointer;
+  box-shadow: var(--card-shadow);
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.finai-circle-btn:hover {
+  background: var(--sidebar-hover-bg);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
+
+.finai-badge-dot {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  width: 6px;
+  height: 6px;
+  background-color: var(--accent-green);
+  border-radius: 50%;
+}
+
+.finai-select-pill {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-pill);
+  padding: 0.45rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  box-shadow: var(--card-shadow);
+  outline: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* ==========================================================================
+   Dashboard Row 1: Top Metrics Cards
+   ========================================================================== */
+.finai-metric-cards-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr 1fr 1fr;
+  gap: 1.15rem;
+}
+
+@media (max-width: 1200px) {
+  .finai-metric-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .finai-metric-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Dark Total Balance Hero Card */
+.finai-dark-card {
+  background: var(--dark-hero-bg);
+  color: var(--dark-hero-text);
+  border-radius: var(--radius-card);
+  padding: 1.25rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 140px;
+  box-shadow: 0 10px 25px -5px rgba(18, 28, 21, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.finai-dark-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--dark-hero-subtext);
+  font-weight: 600;
+}
+
+.finai-dark-card-balance {
+  font-size: 1.95rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin: 0.35rem 0;
+  line-height: 1.15;
+}
+
+.finai-dark-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--dark-hero-pill-bg);
+  color: var(--dark-hero-pill-text);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.72rem;
+  font-weight: 700;
+  width: fit-content;
+}
+
+/* White Metric Cards */
+.finai-white-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  padding: 1.25rem 1.3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 140px;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.finai-white-card:hover {
+  border-color: var(--card-border-hover);
+  transform: translateY(-2px);
+}
+
+.finai-metric-header {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.finai-dot-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.finai-dot-indicator.green {
+  background-color: var(--accent-green);
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+}
+
+.finai-dot-indicator.red {
+  background-color: var(--accent-red);
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+.finai-metric-value {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  margin: 0.35rem 0;
+}
+
+.finai-trend-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.72rem;
+  font-weight: 700;
+  width: fit-content;
+}
+
+.finai-trend-pill.green {
+  background: var(--accent-green-light);
+  color: var(--accent-green-hover);
+}
+
+.finai-trend-pill.red {
+  background: var(--accent-red-light);
+  color: var(--accent-red);
+}
+
+/* ==========================================================================
+   Dashboard Row 2: Spending Overview & AI Insights / Quick Actions
+   ========================================================================== */
+.finai-dashboard-split-row {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 1.15rem;
+}
+
+@media (max-width: 1024px) {
+  .finai-dashboard-split-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Spending Overview Card */
+.finai-spending-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  padding: 1.4rem;
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+}
+
+.finai-card-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.2rem;
+}
+
+.finai-section-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.finai-spending-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.finai-spending-subtitle strong {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.finai-spending-content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: auto;
+}
+
+@media (max-width: 600px) {
+  .finai-spending-content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.finai-donut-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.finai-donut-center-label {
+  position: absolute;
+  text-align: center;
+  pointer-events: none;
+}
+
+.finai-donut-center-sub {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.finai-donut-center-main {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.finai-category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.finai-category-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.82rem;
+}
+
+.finai-cat-left {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.finai-cat-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+}
+
+.finai-cat-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.finai-cat-amount {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.finai-cat-percent {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  min-width: 28px;
+  text-align: right;
+}
+
+/* Stacked Right Column: AI Insight + Quick Actions */
+.finai-stacked-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+/* AI Smart Insight Dark Card */
+.finai-insight-dark-card {
+  background: var(--dark-hero-bg);
+  color: var(--dark-hero-text);
+  border-radius: var(--radius-card);
+  padding: 1.35rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 25px -5px rgba(18, 28, 21, 0.2);
+}
+
+.finai-insight-watermark {
+  position: absolute;
+  right: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.15;
+  color: #4ade80;
+  pointer-events: none;
+}
+
+.finai-insight-header {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #4ade80;
+}
+
+.finai-insight-body {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e5ede7;
+  margin: 0.6rem 0 1rem;
+  max-width: 80%;
+  line-height: 1.35;
+}
+
+.finai-green-btn {
+  background: var(--accent-green);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 0.55rem 1.2rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: fit-content;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+}
+
+.finai-green-btn:hover {
+  background: var(--accent-green-hover);
+  transform: translateY(-1px);
+}
+
+/* Quick Actions Card */
+.finai-quick-actions-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  padding: 1.25rem 1.3rem;
+  box-shadow: var(--card-shadow);
+}
+
+.finai-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+}
+
+.finai-action-btn {
+  background: var(--card-bg-subtle);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 0.85rem 0.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  color: var(--text-secondary);
+}
+
+.finai-action-btn:hover {
+  background: var(--accent-green-light);
+  border-color: var(--accent-green-border);
+  color: var(--accent-green-hover);
+  transform: translateY(-2px);
+}
+
+.finai-action-icon-tile {
+  color: var(--accent-green);
+}
+
+.finai-action-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.1;
+}
+
+/* ==========================================================================
+   Dashboard Row 3: AI Recommendations & Recent Transactions
+   ========================================================================== */
+.finai-recs-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  padding: 1.4rem;
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.finai-recs-carousel {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) auto;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 800px) {
+  .finai-recs-carousel {
+    grid-template-columns: 1fr;
+  }
+}
+
+.finai-rec-item {
+  background: var(--card-bg-subtle);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 1rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.finai-rec-item:hover {
+  border-color: var(--card-border-hover);
+  transform: translateY(-2px);
+}
+
+.finai-rec-icon-box {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.finai-rec-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.finai-rec-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.finai-rec-nav-arrow {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--card-bg-subtle);
+  border: 1px solid var(--card-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.finai-rec-nav-arrow:hover {
+  background: var(--accent-green-light);
+  color: var(--accent-green-hover);
+}
+
+/* Recent Transactions Card */
+.finai-transactions-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  padding: 1.4rem;
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+}
+
+.finai-tx-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+
+.finai-tx-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.finai-tx-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.finai-tx-icon-tile {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--card-bg-subtle);
+  border: 1px solid var(--card-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+}
+
+.finai-tx-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.finai-tx-time {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.finai-tx-amount {
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.finai-tx-amount.negative {
+  color: var(--accent-red);
+}
+
+.finai-tx-amount.positive {
+  color: var(--accent-green);
+}
+
+.finai-view-all-link {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.finai-view-all-link:hover {
+  color: var(--accent-green-hover);
+}
+
+/* ==========================================================================
+   Modals, Floating Panels & Form Elements
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(18, 28, 21, 0.4);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1.5rem;
+}
+
+.modal-container {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  width: 100%;
+  max-width: 520px;
+  padding: 1.75rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.1rem;
+}
+
+.form-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.form-input, .form-select, .form-textarea {
+  background: var(--card-bg-subtle);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.88rem;
+  font-family: inherit;
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--accent-green);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
+  background: var(--card-bg);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.65rem 1.2rem;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.btn-primary {
+  background: var(--accent-green);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background: var(--accent-green-hover);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
+}
+
+.btn-secondary {
+  background: var(--card-bg-subtle);
+  border: 1px solid var(--card-border);
+  color: var(--text-secondary);
+}
+
+.btn-secondary:hover {
+  background: var(--sidebar-hover-bg);
+  color: var(--text-primary);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.badge-accepted {
+  background: var(--accent-green-light);
+  color: var(--accent-green-hover);
+}
+
+.badge-bullish {
+  background: var(--accent-green-light);
+  color: var(--accent-green-hover);
+}
+
+.badge-bearish {
+  background: var(--accent-red-light);
+  color: var(--accent-red);
+}
+
+.badge-neutral {
+  background: var(--accent-amber-light);
+  color: var(--accent-amber);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
