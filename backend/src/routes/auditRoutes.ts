@@ -35,9 +35,12 @@ router.get('/', async (req, res) => {
 
     const goalProgress = goalsRes.rows.map(g => {
       const target = Number(g.target_amount);
-      const isAchieved = lockerBalance >= target || g.status === 'COMPLETED';
-      const remainingGap = Math.max(0, target - lockerBalance);
-      const progressPercent = Math.min(100, Math.round((lockerBalance / target) * 100));
+      const allocated = Number(g.allocated_invest_amount || 0);
+      const saved = Number(g.current_saved_amount || 0);
+      const totalAccumulated = saved + lockerBalance;
+      const isAchieved = totalAccumulated >= target || g.status === 'COMPLETED';
+      const remainingGap = Math.max(0, target - totalAccumulated);
+      const progressPercent = Math.min(100, Math.round((totalAccumulated / target) * 100));
 
       return {
         id: g.id,
@@ -45,10 +48,13 @@ router.get('/', async (req, res) => {
         target_amount: target,
         horizon_years: Number(g.horizon_years),
         priority_rank: g.priority_rank,
-        status: isAchieved ? 'COMPLETED' : g.status,
+        allocated_invest_amount: allocated,
+        current_saved_amount: saved,
         locker_balance: lockerBalance,
+        total_accumulated: totalAccumulated,
         remaining_gap: remainingGap,
         progress_percent: progressPercent,
+        status: isAchieved ? 'COMPLETED' : g.status,
         is_achieved: isAchieved
       };
     });

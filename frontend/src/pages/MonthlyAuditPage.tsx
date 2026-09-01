@@ -15,10 +15,11 @@ import {
   Zap,
   Award
 } from 'lucide-react';
-import { fetchAuditData, submitMonthlyAudit, deleteMonthlyAudit } from '../services/api';
+import { fetchAuditData, submitMonthlyAudit, deleteMonthlyAudit, fetchSpendingLogs } from '../services/api';
 
 interface MonthlyAuditPageProps {
   familyId: number;
+  planId?: number;
   plannedEssentials: number;
   plannedDiscretionary: number;
   onRefreshPlan?: () => void;
@@ -26,6 +27,7 @@ interface MonthlyAuditPageProps {
 
 export const MonthlyAuditPage: React.FC<MonthlyAuditPageProps> = ({
   familyId,
+  planId,
   plannedEssentials,
   plannedDiscretionary,
   onRefreshPlan
@@ -43,6 +45,7 @@ export const MonthlyAuditPage: React.FC<MonthlyAuditPageProps> = ({
   const [secretLockerSplitAmount, setSecretLockerSplitAmount] = useState<number>(0);
   const [notes, setNotes] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [autoPopulating, setAutoPopulating] = useState(false);
   const [notification, setNotification] = useState<string | null>(null);
 
   const loadAuditData = async () => {
@@ -64,6 +67,26 @@ export const MonthlyAuditPage: React.FC<MonthlyAuditPageProps> = ({
       loadAuditData();
     }
   }, [familyId]);
+
+  const handleAutoPopulate = async () => {
+    if (!planId) {
+      setActualEssentials('0');
+      setActualDiscretionary('0');
+      return;
+    }
+    setAutoPopulating(true);
+    try {
+      const spendingData = await fetchSpendingLogs(planId);
+      if (spendingData?.totals) {
+        setActualEssentials(String(spendingData.totals.totalEssentialsSpent));
+        setActualDiscretionary(String(spendingData.totals.totalDiscretionarySpent));
+      }
+    } catch (e) {
+      console.error('Auto populate failed:', e);
+    } finally {
+      setAutoPopulating(false);
+    }
+  };
 
   const actEss = Number(actualEssentials || 0);
   const actDisc = Number(actualDiscretionary || 0);
@@ -234,7 +257,7 @@ export const MonthlyAuditPage: React.FC<MonthlyAuditPageProps> = ({
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Award size={18} color="var(--accent-green)" />
                 <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-secondary)' }}>
-                  Long-Term Goal Progress
+                  Active Priority Goal
                 </span>
               </div>
               {topGoal?.is_achieved && (
@@ -244,13 +267,28 @@ export const MonthlyAuditPage: React.FC<MonthlyAuditPageProps> = ({
               )}
             </div>
 
-            <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.2rem' }}>
+            <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.4rem' }}>
               {topGoal ? topGoal.description : 'No Long-Term Goals Registered'}
             </div>
 
             {topGoal ? (
-              <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-                Target: <strong>₹{topGoal.target_amount.toLocaleString()}</strong> • Saved in Locker: <strong>₹{safeLockerBalance.toLocaleString()}</strong>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span>Target Amount:</span>
+                  <strong>₹{topGoal.target_amount.toLocaleString()}</strong>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span>Monthly Investment Allocated:</span>
+                  <strong style={{ color: 'var(--accent-green)' }}>+₹{(topGoal.allocated_invest_amount || 0).toLocaleString()}/mo</strong>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span>Surplus Credited Directly:</span>
+                  <strong style={{ color: '#8b5cf6' }}>+₹{(topGoal.current_saved_amount || 0).toLocaleString()}</strong>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span>Safe Locker Reserve Vault:</span>
+                  <strong style={{ color: 'var(--accent-green-hover)' }}>₹{safeLockerBalance.toLocaleString()}</strong>
+                </div>
               </div>
             ) : (
               <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
@@ -260,10 +298,10 @@ export const MonthlyAuditPage: React.FC<MonthlyAuditPageProps> = ({
           </div>
 
           {topGoal && (
-            <div style={{ marginTop: '1rem' }}>
+            <div style={{ marginTop: '0.85rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', marginBottom: '0.35rem' }}>
-                <span style={{ color: 'var(--text-muted)' }}>Locker Progress: {topGoal.progress_percent}%</span>
-                <span style={{ fontWeight: 700, color: topGoal.remaining_gap === 0 ? 'var(--accent-green-hover)' : 'var(--accent-rose)' }}>
+                <span style={{ color: 'var(--text-muted)' }}>Total Saved: ₹{(topGoal.total_accumulated || safeLockerBalance).toLocaleString()} ({topGoal.progress_percent}%)</span>
+                <span style={{ fontWeight: 800, color: topGoal.remaining_gap === 0 ? 'var(--accent-green-hover)' : 'var(--accent-rose)' }}>
                   {topGoal.remaining_gap === 0 ? 'Goal 100% Achieved!' : `₹${topGoal.remaining_gap.toLocaleString()} Left to Complete`}
                 </span>
               </div>
@@ -287,14 +325,28 @@ export const MonthlyAuditPage: React.FC<MonthlyAuditPageProps> = ({
 
       {/* Monthly Audit Review Form */}
       <section className="glass-card" style={{ padding: '1.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.25rem' }}>
-          <Calendar size={22} color="var(--accent-green)" />
-          <div>
-            <h3 style={{ fontSize: '1.15rem', fontWeight: 800 }}>Monthly Expense Audit Review</h3>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-              Review your actual spent vs planned budget for the month. Unspent funds are locked into your Safe Locker!
-            </p>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1.25rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <Calendar size={22} color="var(--accent-green)" />
+            <div>
+              <h3 style={{ fontSize: '1.15rem', fontWeight: 800 }}>Monthly Expense Audit Review</h3>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                Review your actual spent vs planned budget for the month. Unspent funds are locked into your Safe Locker!
+              </p>
+            </div>
           </div>
+
+          <button
+            type="button"
+            className="finai-ai-prompt-chip"
+            onClick={handleAutoPopulate}
+            disabled={autoPopulating}
+            style={{ fontWeight: 700, color: 'var(--accent-green-hover)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}
+            title="Auto-fill actual spent from transactions logged this month"
+          >
+            <Zap size={14} />
+            <span>{autoPopulating ? 'Fetching...' : '⚡ Auto-Populate from Tracked Spending'}</span>
+          </button>
         </div>
 
         <form onSubmit={handleSubmitAudit}>

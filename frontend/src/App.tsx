@@ -327,6 +327,7 @@ export const App: React.FC = () => {
             {activeTab === 'audit' && currentFamily && (
               <MonthlyAuditPage
                 familyId={currentFamily.id}
+                planId={planData?.plan?.id}
                 plannedEssentials={Number(planData?.plan?.spend_budget || 67500)}
                 plannedDiscretionary={Number(planData?.plan?.discretionary_budget || 15000)}
                 onRefreshPlan={loadPlan}
